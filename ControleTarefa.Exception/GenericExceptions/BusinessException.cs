@@ -1,4 +1,6 @@
-﻿namespace ControleTarefas
+﻿using System;
+
+namespace ControleTarefas.GenericException.GenericExceptions
 {
     public class BusinessException : Exception
     {
