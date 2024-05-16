@@ -10,10 +10,10 @@ namespace ControleTarefas.Repositorio.Interface.IRepositorios
 
         List<TarefaDTO> ListarTodas();
 
-        List<TarefaDTO> InserirTarefa(string tarefa);
+        void InserirTarefa(Tarefa novaTarefa);
 
-        List<TarefaDTO> DeletarTarefa(string nomeTarefa);
+        void DeletarTarefa(Tarefa tarefa);
 
-        List<TarefaDTO> AlterarTarefa(string nomeTarefa, string novoNomeTarefa);
+        Tarefa? ObterTarefa(string tituloTarefa);
     }
 }

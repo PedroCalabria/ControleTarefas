@@ -34,23 +34,27 @@ namespace ControleTarefas.Negocio.Negocios
         public List<TarefaDTO> InserirTarefa(string novaTarefa)
         {
             var timestamp = DateTime.Now.ToString("yyyy/MM/dd - HH:mm:ss");
+            var tarefa = _tarefaRepositorio.ObterTarefa(novaTarefa);
 
-            if (verificarTarefaExistente(novaTarefa))
+            if (tarefa != null)
             {
                 var msg = $"[{timestamp}] A tarefa '{novaTarefa}'  já existe na base.";
                 throw new BusinessException(msg);
             }
 
-            return _tarefaRepositorio.InserirTarefa(novaTarefa);
+            _tarefaRepositorio.InserirTarefa(new Tarefa(novaTarefa));
+
+            return _tarefaRepositorio.ListarTodas();
         }
 
         public List<TarefaDTO> DeletarTarefa(string nomeTarefa)
         {
             var timestamp = DateTime.Now.ToString("yyyy/MM/dd - HH:mm:ss");
+            var tarefa = _tarefaRepositorio.ObterTarefa(nomeTarefa);
 
-            if (verificarTarefaExistente(nomeTarefa))
+            if (tarefa != null)
             {
-                _tarefaRepositorio.DeletarTarefa(nomeTarefa.ToUpper());
+                _tarefaRepositorio.DeletarTarefa(tarefa);
             }
             else
             {
@@ -63,31 +67,17 @@ namespace ControleTarefas.Negocio.Negocios
         public List<TarefaDTO> AlterarTarefa(string nomeTarefa, string novoNomeTarefa)
         {
             var timestamp = DateTime.Now.ToString("yyyy/MM/dd - HH:mm:ss");
+            var tarefa = _tarefaRepositorio.ObterTarefa(nomeTarefa);
 
-            if (!verificarTarefaExistente(nomeTarefa))
+            if (tarefa == null)
             {
                 throw new BusinessException($"[{timestamp}] A tarefa '{nomeTarefa}' não existe na base.");
             }
 
-            return _tarefaRepositorio.AlterarTarefa(nomeTarefa.ToUpper(), novoNomeTarefa);
-        }
+            tarefa.Titulo = novoNomeTarefa;
 
-        private bool verificarTarefaExistente(string nomeTarefa)
-        {
-            List<string> tarefas = new List<string>
-            {
-                nomeTarefa.ToUpper()
-            };
-
-            List<TarefaDTO> tarefaExistente = _tarefaRepositorio.ListarTarefas(tarefas);
-
-            if (tarefaExistente.Count <= 0)
-            {
-                return false;
-            }
-
-            return true;
-        }
+            return _tarefaRepositorio.ListarTodas();
+        }      
 
     }
 }

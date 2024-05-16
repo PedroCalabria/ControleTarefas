@@ -1,4 +1,5 @@
 ﻿using ControleTarefas.Entidade.DTO;
+using ControleTarefas.Entidade.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Linq;

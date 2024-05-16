@@ -29,43 +29,20 @@ namespace ControleTarefas.Repositorio.Repositorios
                           .ToList();
         }
 
-        public List<TarefaDTO> InserirTarefa(string novaTarefa)
+        public void InserirTarefa(Tarefa novaTarefa)
         {
-            Tarefas.Add(new(novaTarefa));
-
-            return Tarefas.OrderBy(tarefa => tarefa.Titulo)
-                          .Select(tarefa => new TarefaDTO
-                          {
-                              Titulo = tarefa.Titulo,
-                          })
-                          .ToList();
+            Tarefas.Add(novaTarefa);
         }
 
-        public List<TarefaDTO> DeletarTarefa(string nomeTarefa)
+        public void DeletarTarefa(Tarefa tarefa)
         {
 
-            Tarefas.RemoveAll(tarefa => tarefa.Titulo.ToUpper() == nomeTarefa);
-
-            return Tarefas.OrderBy(tarefa => tarefa.Titulo.ToUpper())
-                          .Select(tarefa => new TarefaDTO
-                          {
-                              Titulo = tarefa.Titulo,
-                          })
-                          .ToList();
+            Tarefas.Remove(tarefa);
         }
 
-        public List<TarefaDTO> AlterarTarefa(string nomeTarefa, string novoNomeTarefa)
+        public Tarefa? ObterTarefa(string nomeTarefa)
         {
-            Tarefa tarefa = Tarefas.FirstOrDefault(tarefa => tarefa.Titulo.ToUpper() == nomeTarefa);
-
-            tarefa.Titulo = novoNomeTarefa;
-
-            return Tarefas.OrderBy(tarefa => tarefa.Titulo)
-                          .Select(tarefa => new TarefaDTO
-                          {
-                              Titulo = tarefa.Titulo,
-                          })
-                          .ToList();
+            return Tarefas.Find(tarefa => tarefa.Titulo.ToUpper() == nomeTarefa.ToUpper());
         }
     }
 }
