@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ControleTarefas.Negocio.Interface.Negocios;
+using ControleTarefas.Entidade.DTO;
+using ControleTarefas.GenericException.GenericExceptions;
 
-namespace ControleTarefas.Controllers
+namespace ControleTarefas.Api.Controllers
 {
     // Anotação (attribute) que indica que a classe ControleTarefaController é um controlador de API.
     // Habilita comportamentos específicos para APIs.
@@ -16,10 +19,13 @@ namespace ControleTarefas.Controllers
         // O modificador readonly garante que _logger só pode ser atribuído uma vez.
         private readonly ILogger<ControleTarefaController> _logger;
 
+        private readonly ITarefaNegocio _tarefaNegocio;
+
         //Construtor da classe ControleTarefaController.
-        public ControleTarefaController(ILogger<ControleTarefaController> logger)
+        public ControleTarefaController(ILogger<ControleTarefaController> logger, ITarefaNegocio tarefaNegocio)
         {
             _logger = logger;
+            _tarefaNegocio = tarefaNegocio;
         }
 
         // Indica o tipo de requisição
@@ -27,64 +33,33 @@ namespace ControleTarefas.Controllers
 
         // ActionResult => retorno de método usado em controladores do ASP.NET Core MVC para representar o resultado de uma ação.
         // Fornece flexibilidade ao controlador para retornar diferentes tipos de respostas HTTP, como um objeto JSON.
-        public ActionResult<List<string>> Get()
+        public ActionResult<List<TarefaDTO>> ListarTodasTarefas()
         {
-            return Tarefas;
+            return _tarefaNegocio.ListarTarefas(null);
+        }
+
+        [HttpPost("FiltrarTarefas")]
+        public ActionResult<List<TarefaDTO>> FiltrarTarefas(List<string> tarefas)
+        {
+            return _tarefaNegocio.ListarTarefas(tarefas);
         }
 
         [HttpPost("InserirTarefa")]
-        public ActionResult<List<string>> Post(string novaTarefa)
+        public ActionResult<List<TarefaDTO>> InserirTarefa(string novaTarefa)
         {
-            var timestamp = DateTime.Now.ToString("yyyy/MM/dd - HH:mm:ss");
-
-            if (Tarefas.Contains(novaTarefa))
-            {
-                var msg = $"[{timestamp}] A tarefa '{novaTarefa}'  já existe ma base.";
-                _logger.LogInformation(msg);
-                throw new BusinessException(msg);
-            }
-
-            _logger.LogInformation($"[{timestamp}] A tarefa '{novaTarefa}' foi adicionada.");
-            Tarefas.Add(novaTarefa);
-
-            return Tarefas;
+            return _tarefaNegocio.InserirTarefa(novaTarefa);
         }
 
         [HttpDelete("DeletarTarefa")]
-        public ActionResult<List<string>> Delete(string nomeTarefa)
+        public ActionResult<List<TarefaDTO>> DeletarTarefa(string nomeTarefa)
         {
-            var timestamp = DateTime.Now.ToString("yyyy/MM/dd - HH:mm:ss");
-            var indexTarefaExistente = Tarefas.FindIndex(tarefa => tarefa == nomeTarefa);
-
-            if (indexTarefaExistente != -1)
-            {
-                Tarefas.Remove(nomeTarefa);
-                _logger.LogInformation($"[{timestamp}] A tarefa '{nomeTarefa}' foi removida.");
-            }
-            else
-            {
-                throw new BusinessException($"[{timestamp}] A tarefa '{nomeTarefa}' não existe na base.");
-            }
-
-            return Tarefas;
+           return _tarefaNegocio.DeletarTarefa(nomeTarefa);
         }
 
         [HttpPut("AlterarTarefa")]
-        public ActionResult<List<string>> Put(string nomeTarefa, string novoNomeTarefa)
+        public ActionResult<List<TarefaDTO>> AlterarTarefa(string nomeTarefa, string novoNomeTarefa)
         {
-            var timestamp = DateTime.Now.ToString("yyyy/MM/dd - HH:mm:ss");
-            var indexTarefaExistente = Tarefas.FindIndex(tarefa => tarefa == nomeTarefa);
-
-            if (indexTarefaExistente != -1)
-            {
-                Tarefas[indexTarefaExistente] = novoNomeTarefa;
-            }
-            else
-            {
-                throw new BusinessException($"[{timestamp}] A tarefa '{nomeTarefa}' não existe na base.");
-            }
-
-            return Tarefas;
+            return _tarefaNegocio.AlterarTarefa(nomeTarefa, novoNomeTarefa);
         }
     }
 }

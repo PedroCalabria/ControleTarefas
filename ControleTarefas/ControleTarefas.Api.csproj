@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ControleTarefa.Entidade\ControleTarefas.Entidade.csproj" />
+    <ProjectReference Include="..\ControleTarefa.Exception\ControleTarefa.GenericException.csproj" />
+    <ProjectReference Include="..\ControleTarefa.Negocio.Interface\ControleTarefas.Negocio.Interface.csproj" />
+    <ProjectReference Include="..\ControleTarefa.Negocio\ControleTarefas.Negocio.csproj" />
+    <ProjectReference Include="..\ControleTarefa.Repositorio.Interface\ControleTarefas.Repositorio.Interface.csproj" />
+    <ProjectReference Include="..\ControleTarefa.Repositorio\ControleTarefas.Repositorio.csproj" />
+  </ItemGroup>
+
+</Project>
