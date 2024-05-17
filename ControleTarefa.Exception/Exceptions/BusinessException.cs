@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ControleTarefas.GenericException.GenericExceptions
+namespace ControleTarefas.Utilitarios.Exceptions
 {
     public class BusinessException : Exception
     {

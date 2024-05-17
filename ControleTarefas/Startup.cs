@@ -1,4 +1,5 @@
-﻿using ControleTarefas.Negocio.Interface.Negocios;
+﻿using ControleTarefas.Api.Middleware;
+using ControleTarefas.Negocio.Interface.Negocios;
 using ControleTarefas.Negocio.Negocios;
 using ControleTarefas.Repositorio.Interface.IRepositorios;
 using ControleTarefas.Repositorio.Repositorios;
@@ -20,6 +21,7 @@ namespace ControleTarefas.WebApi
 
             services.AddScoped<ITarefaRepositorio, TarefaRepositorio>();
             services.AddScoped<ITarefaNegocio, TarefaNegocio>();
+            services.AddTransient<ApiMiddleware>();
 
             services.AddSwaggerGen(c =>
             {
@@ -51,6 +53,8 @@ namespace ControleTarefas.WebApi
             });
 
             app.UseRouting();
+
+            app.UseMiddleware<ApiMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ControleTarefas.Negocio.Interface.Negocios;
 using ControleTarefas.Entidade.DTO;
-using ControleTarefas.GenericException.GenericExceptions;
+using ControleTarefas.Utilitarios.Exceptions;
 
 namespace ControleTarefas.Api.Controllers
 {
