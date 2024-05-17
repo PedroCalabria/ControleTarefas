@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControleTarefas.Repositorio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControleTarefas.Entidade", "ControleTarefa.Entidade\ControleTarefas.Entidade.csproj", "{3E2C96CB-1B0C-4D8C-8979-B918B2A58E08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControleTarefa.GenericException", "ControleTarefa.Exception\ControleTarefa.GenericException.csproj", "{731D622C-310A-487E-B9BA-2F9D17CF2719}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControleTarefas.Utilitarios", "ControleTarefa.Exception\ControleTarefas.Utilitarios.csproj", "{731D622C-310A-487E-B9BA-2F9D17CF2719}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

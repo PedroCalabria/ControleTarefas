@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ControleTarefa.Exception\ControleTarefa.GenericException.csproj" />
+    <PackageReference Include="log4net" Version="2.0.17" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ControleTarefa.Exception\ControleTarefas.Utilitarios.csproj" />
     <ProjectReference Include="..\ControleTarefa.Negocio.Interface\ControleTarefas.Negocio.Interface.csproj" />
     <ProjectReference Include="..\ControleTarefa.Repositorio.Interface\ControleTarefas.Repositorio.Interface.csproj" />
   </ItemGroup>

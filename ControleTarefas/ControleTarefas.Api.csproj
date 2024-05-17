@@ -7,12 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.17" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ControleTarefa.Entidade\ControleTarefas.Entidade.csproj" />
-    <ProjectReference Include="..\ControleTarefa.Exception\ControleTarefa.GenericException.csproj" />
+    <ProjectReference Include="..\ControleTarefa.Exception\ControleTarefas.Utilitarios.csproj" />
     <ProjectReference Include="..\ControleTarefa.Negocio.Interface\ControleTarefas.Negocio.Interface.csproj" />
     <ProjectReference Include="..\ControleTarefa.Negocio\ControleTarefas.Negocio.csproj" />
     <ProjectReference Include="..\ControleTarefa.Repositorio.Interface\ControleTarefas.Repositorio.Interface.csproj" />
