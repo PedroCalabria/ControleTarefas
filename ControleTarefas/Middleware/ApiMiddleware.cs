@@ -47,6 +47,9 @@ namespace ControleTarefas.Api.Middleware
                 case BusinessException:
                     messages.Add(ex.Message);
                     break;
+                case BusinessListException:
+                    messages = ((BusinessListException)ex).Messages;
+                    break;
                 default:
                     messages.Add(string.Format(InfraMessages.ErroInesperado));
                     break;

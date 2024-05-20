@@ -1,4 +1,5 @@
-﻿using ControleTarefas.Api.Middleware;
+﻿using ControleTarefas.Api.Configuration;
+using ControleTarefas.Api.Middleware;
 using ControleTarefas.Negocio.Interface.Negocios;
 using ControleTarefas.Negocio.Negocios;
 using ControleTarefas.Repositorio.Interface.IRepositorios;
@@ -19,8 +20,10 @@ namespace ControleTarefas.WebApi
         {
             services.AddControllers();
 
-            services.AddScoped<ITarefaRepositorio, TarefaRepositorio>();
-            services.AddScoped<ITarefaNegocio, TarefaNegocio>();
+            services.AddDependencyInjectionConfiguration();
+
+            services.AddFluentConfiguration();
+            
             services.AddTransient<ApiMiddleware>();
 
             services.AddSwaggerGen(c =>

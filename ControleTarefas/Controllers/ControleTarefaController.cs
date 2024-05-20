@@ -2,6 +2,7 @@
 using ControleTarefas.Negocio.Interface.Negocios;
 using ControleTarefas.Entidade.DTO;
 using ControleTarefas.Utilitarios.Exceptions;
+using ControleTarefas.Entidade.Model;
 
 namespace ControleTarefas.Api.Controllers
 {
@@ -45,7 +46,7 @@ namespace ControleTarefas.Api.Controllers
         }
 
         [HttpPost("InserirTarefa")]
-        public ActionResult<List<TarefaDTO>> InserirTarefa(string novaTarefa)
+        public ActionResult<List<TarefaDTO>> InserirTarefa(CadastroTarefaModel novaTarefa)
         {
             return _tarefaNegocio.InserirTarefa(novaTarefa);
         }
