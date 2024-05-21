@@ -117,6 +117,21 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CampoInvalido" xml:space="preserve">
+    <value>O campo '{0}' está inválido.</value>
+  </data>
+  <data name="CampoObrigatorio" xml:space="preserve">
+    <value>O campo '{0}' é obrigatório.</value>
+  </data>
+  <data name="CampoTamanhoMaximo" xml:space="preserve">
+    <value>O campo '{0}' deve possuir no máximo {1} caracters.</value>
+  </data>
+  <data name="CampoTamanhoMinimo" xml:space="preserve">
+    <value>O campo '{0}' deve possuir no mínimo {1} caracters.</value>
+  </data>
+  <data name="OperacaoRealizadaComSucesso" xml:space="preserve">
+    <value>A operação '{0}' foi realizada com sucesso.</value>
+  </data>
   <data name="RegistroJaExistente" xml:space="preserve">
     <value>O registro '{0}' já existe na base.</value>
   </data>

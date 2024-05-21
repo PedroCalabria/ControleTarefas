@@ -61,6 +61,51 @@ namespace ControleTarefas.Utilitarios.Messages {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O campo &apos;{0}&apos; está inválido..
+        /// </summary>
+        public static string CampoInvalido {
+            get {
+                return ResourceManager.GetString("CampoInvalido", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O campo &apos;{0}&apos; é obrigatório..
+        /// </summary>
+        public static string CampoObrigatorio {
+            get {
+                return ResourceManager.GetString("CampoObrigatorio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O campo &apos;{0}&apos; deve possuir no máximo {1} caracters..
+        /// </summary>
+        public static string CampoTamanhoMaximo {
+            get {
+                return ResourceManager.GetString("CampoTamanhoMaximo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O campo &apos;{0}&apos; deve possuir no mínimo {1} caracters..
+        /// </summary>
+        public static string CampoTamanhoMinimo {
+            get {
+                return ResourceManager.GetString("CampoTamanhoMinimo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a A operação &apos;{0}&apos; foi realizada com sucesso..
+        /// </summary>
+        public static string OperacaoRealizadaComSucesso {
+            get {
+                return ResourceManager.GetString("OperacaoRealizadaComSucesso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a O registro &apos;{0}&apos; já existe na base..
         /// </summary>
         public static string RegistroJaExistente {

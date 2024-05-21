@@ -14,6 +14,7 @@
     <ProjectReference Include="..\ControleTarefa.Exception\ControleTarefas.Utilitarios.csproj" />
     <ProjectReference Include="..\ControleTarefa.Negocio.Interface\ControleTarefas.Negocio.Interface.csproj" />
     <ProjectReference Include="..\ControleTarefa.Repositorio.Interface\ControleTarefas.Repositorio.Interface.csproj" />
+    <ProjectReference Include="..\ControleTarefas.Validator\ControleTarefas.Validator.csproj" />
   </ItemGroup>
 
 </Project>

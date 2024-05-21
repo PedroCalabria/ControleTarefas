@@ -5,6 +5,8 @@ using ControleTarefas.Utilitarios.Exceptions;
 using ControleTarefas.Entidade.Entidades;
 using log4net;
 using ControleTarefas.Utilitarios.Messages;
+using ControleTarefas.Validator.Manual;
+using ControleTarefas.Entidade.Model;
 
 
 namespace ControleTarefas.Negocio.Negocios
@@ -34,18 +36,14 @@ namespace ControleTarefas.Negocio.Negocios
             }
         }
 
-        public List<TarefaDTO> InserirTarefa(string novaTarefa)
+        public List<TarefaDTO> InserirTarefa(CadastroTarefaModel novaTarefa)
         {
-            var tarefa = _tarefaRepositorio.ObterTarefa(novaTarefa);
+            var tarefa = _tarefaRepositorio.ObterTarefa(novaTarefa.Titulo);
 
-            if (tarefa != null)
-            {
-                _log.InfoFormat("A tarefa '{0}' já existe na base.", novaTarefa);
-                throw new BusinessException(string.Format(BusinessMessages.RegistroJaExistente, tarefa.Titulo));
-            }
+            CadastroTarefaValidator.Validar(novaTarefa, tarefa);
 
-            _tarefaRepositorio.InserirTarefa(new Tarefa(novaTarefa));
-            _log.InfoFormat("A tarefa '{0}' foi inserida na base.", novaTarefa);
+            _tarefaRepositorio.InserirTarefa(new Tarefa(novaTarefa.Titulo));
+            _log.InfoFormat(BusinessMessages.OperacaoRealizadaComSucesso, "InserirTarefa");
 
             return _tarefaRepositorio.ListarTodas();
         }
@@ -57,30 +55,29 @@ namespace ControleTarefas.Negocio.Negocios
             if (tarefa != null)
             {
                 _tarefaRepositorio.DeletarTarefa(tarefa);
-                _log.InfoFormat("A tarefa '{0}' foi removida da base.", tarefa.Titulo);
+                _log.InfoFormat(BusinessMessages.OperacaoRealizadaComSucesso, "DeletarTarefa");
             }
             else
             {
-                _log.InfoFormat("A tarefa '{0}' não existe na base.", nomeTarefa);
+                _log.InfoFormat(BusinessMessages.RegistroNaoEncontrado, nomeTarefa);
                 throw new BusinessException(string.Format(BusinessMessages.RegistroNaoEncontrado, nomeTarefa));
             }
 
             return _tarefaRepositorio.ListarTodas();
         }
 
-        public List<TarefaDTO> AlterarTarefa(string nomeTarefa, string novoNomeTarefa)
+        public List<TarefaDTO> AlterarTarefa(string nomeTarefa, CadastroTarefaModel novaTarefa)
         {
             var tarefa = _tarefaRepositorio.ObterTarefa(nomeTarefa);
 
             if (tarefa == null)
             {
-                _log.InfoFormat("A tarefa '{0}' não existe na base.", nomeTarefa);
+                _log.InfoFormat(BusinessMessages.RegistroNaoEncontrado, nomeTarefa);
                 throw new BusinessException(string.Format(BusinessMessages.RegistroNaoEncontrado, nomeTarefa));
             }
 
-            var nomeAnterior = tarefa.Titulo;
-            tarefa.Titulo = novoNomeTarefa;
-            _log.InfoFormat("o titulo da tarefa '{0}' foi atualizado para '{1}'.", nomeAnterior, novoNomeTarefa);
+            tarefa.Titulo = novaTarefa.Titulo;
+            _log.InfoFormat(BusinessMessages.OperacaoRealizadaComSucesso, "AlterarTarefa");
 
             return _tarefaRepositorio.ListarTodas();
         }      

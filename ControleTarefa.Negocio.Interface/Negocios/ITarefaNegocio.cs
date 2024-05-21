@@ -1,5 +1,6 @@
 ﻿using ControleTarefas.Entidade.DTO;
 using ControleTarefas.Entidade.Entidades;
+using ControleTarefas.Entidade.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,10 @@ namespace ControleTarefas.Negocio.Interface.Negocios
     {
         List<TarefaDTO> ListarTarefas(List<string> tarefas);
 
-        List<TarefaDTO> InserirTarefa(string novaTarefa);
+        List<TarefaDTO> InserirTarefa(CadastroTarefaModel novaTarefa);
 
         List<TarefaDTO> DeletarTarefa(string nomeTarefa);
 
-        List<TarefaDTO> AlterarTarefa(string nomeTarefa, string novoNomeTarefa);
+        List<TarefaDTO> AlterarTarefa(string nomeTarefa, CadastroTarefaModel novaTarefa);
     }
 }
