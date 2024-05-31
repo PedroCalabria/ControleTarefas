@@ -97,6 +97,15 @@ namespace ControleTarefas.Utilitarios.Messages {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O ID deve ser maior que zero..
+        /// </summary>
+        public static string IdValorMinimo {
+            get {
+                return ResourceManager.GetString("IdValorMinimo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a A operação &apos;{0}&apos; foi realizada com sucesso..
         /// </summary>
         public static string OperacaoRealizadaComSucesso {

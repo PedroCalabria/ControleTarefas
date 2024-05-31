@@ -2,26 +2,17 @@
 using ControleTarefas.Entidade.Entidades;
 using ControleTarefas.Entidade.Enum;
 using ControleTarefas.Repositorio.Interface.IRepositorios;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControleTarefas.Repositorio.Repositorios
 {
-    public class UsuarioRepositorio : IUsuarioRepositorio
+    public class UsuarioRepositorio : RepositorioBase<Usuario>, IUsuarioRepositorio
     {
-        public static List<Usuario> Usuarios = new List<Usuario>();
+        public UsuarioRepositorio(Contexto contexto) : base(contexto) { }
 
-        public void DeletarUsuario(Usuario usuario)
+        public Task<List<UsuarioDTO>> ListarTodos()
         {
-            Usuarios.Remove(usuario);
-        }
-
-        public void InserirUsuario(Usuario novoUsuario)
-        {
-            Usuarios.Add(novoUsuario);
-        }
-
-        public List<UsuarioDTO> ListarTodos()
-        {
-            return Usuarios.OrderBy(usuario => usuario.Nome)
+            var query = EntitySet.OrderBy(usuario => usuario.Nome)
                            .Distinct()
                            .Select(usuario => new UsuarioDTO
                            {
@@ -29,13 +20,14 @@ namespace ControleTarefas.Repositorio.Repositorios
                                Email = usuario.Email,
                                Perfil = usuario.Perfil,
                                DataAtualizacao = usuario.DataAtualizacao
-                           })
-                           .ToList();
+                           });
+
+            return query.ToListAsync();
         }
 
-        public List<UsuarioDTO> ListarUsuarios(List<string> emails)
+        public Task<List<UsuarioDTO>> ListarUsuarios(List<string> emails)
         {
-            return Usuarios.Where(usuario => emails.Contains(usuario.Email.ToUpper()))
+            var query = EntitySet.Where(usuario => emails.Contains(usuario.Email.ToUpper()))
                            .OrderBy(usuario => usuario.Nome)
                            .Distinct()
                            .Select(usuario => new UsuarioDTO
@@ -44,13 +36,31 @@ namespace ControleTarefas.Repositorio.Repositorios
                                Email = usuario.Email,
                                Perfil = usuario.Perfil,
                                DataAtualizacao = usuario.DataAtualizacao
-                           })
-                           .ToList();
+                           });
+
+            return query.ToListAsync();
         }
 
-        public Usuario? ObterUsuario(string email)
+        public Task<Usuario> ObterUsuario(string email)
         {
-            return Usuarios.Find(usuario => usuario.Email.ToLower() == email.ToLower());
+            var query = EntitySet.Where(usuario => usuario.Email.ToLower() == email.ToLower());
+
+            return query.FirstOrDefaultAsync();
+        }
+
+        public Task<Usuario> ObterUsuario(int IdUsuario)
+        {
+            var query = EntitySet.Include(e => e.TarefasUsuario)
+                .Where(usuario => usuario.Id == IdUsuario);
+
+            return query.FirstOrDefaultAsync();
+        }
+
+        public Task<List<Usuario>> ConsultarUsuarios(List<int> idsUsuarios)
+        {
+            var query = EntitySet.Where(e => idsUsuarios.Contains(e.Id));
+
+            return query.ToListAsync();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace ControleTarefas.Negocio.Negocios
             _tarefaRepositorio = tarefaRepositorio;
         }
 
-        public List<TarefaDTO> ListarTarefas(List<string> tarefas)
+        public Task<List<TarefaDTO>> ListarTarefas(List<string> tarefas)
         {
             if (tarefas == null)
             {
@@ -36,25 +36,31 @@ namespace ControleTarefas.Negocio.Negocios
             }
         }
 
-        public List<TarefaDTO> InserirTarefa(CadastroTarefaModel novaTarefa)
+        public async Task<List<TarefaDTO>> InserirTarefa(CadastroTarefaModel novaTarefa)
         {
-            var tarefa = _tarefaRepositorio.ObterTarefa(novaTarefa.Titulo);
-
-            CadastroTarefaValidator.Validar(novaTarefa, tarefa);
-
-            _tarefaRepositorio.InserirTarefa(new Tarefa(novaTarefa.Titulo));
-            _log.InfoFormat(BusinessMessages.OperacaoRealizadaComSucesso, "InserirTarefa");
-
-            return _tarefaRepositorio.ListarTodas();
-        }
-
-        public List<TarefaDTO> DeletarTarefa(string nomeTarefa)
-        {
-            var tarefa = _tarefaRepositorio.ObterTarefa(nomeTarefa);
+            var tarefa = await _tarefaRepositorio.ObterTarefa(novaTarefa.Titulo);
 
             if (tarefa != null)
             {
-                _tarefaRepositorio.DeletarTarefa(tarefa);
+                var titulo = tarefa.Titulo;
+                throw new BusinessException(string.Format(BusinessMessages.RegistroJaExistente, titulo));
+            }
+
+            //CadastroTarefaValidator.Validar(novaTarefa, tarefa);
+
+            await _tarefaRepositorio.Inserir(new Tarefa(novaTarefa.Titulo));
+            _log.InfoFormat(BusinessMessages.OperacaoRealizadaComSucesso, "InserirTarefa");
+
+            return await _tarefaRepositorio.ListarTodas();
+        }
+
+        public async Task<List<TarefaDTO>> DeletarTarefa(string nomeTarefa)
+        {
+            var tarefa = await _tarefaRepositorio.ObterTarefa(nomeTarefa);
+
+            if (tarefa != null)
+            {
+                await _tarefaRepositorio.Deletar(tarefa);
                 _log.InfoFormat(BusinessMessages.OperacaoRealizadaComSucesso, "DeletarTarefa");
             }
             else
@@ -63,12 +69,12 @@ namespace ControleTarefas.Negocio.Negocios
                 throw new BusinessException(string.Format(BusinessMessages.RegistroNaoEncontrado, nomeTarefa));
             }
 
-            return _tarefaRepositorio.ListarTodas();
+            return await _tarefaRepositorio.ListarTodas();
         }
 
-        public List<TarefaDTO> AlterarTarefa(string nomeTarefa, CadastroTarefaModel novaTarefa)
+        public async Task<List<TarefaDTO>> AlterarTarefa(string nomeTarefa, string novaTarefa)
         {
-            var tarefa = _tarefaRepositorio.ObterTarefa(nomeTarefa);
+            var tarefa = await _tarefaRepositorio.ObterTarefa(nomeTarefa);
 
             if (tarefa == null)
             {
@@ -76,10 +82,11 @@ namespace ControleTarefas.Negocio.Negocios
                 throw new BusinessException(string.Format(BusinessMessages.RegistroNaoEncontrado, nomeTarefa));
             }
 
-            tarefa.Titulo = novaTarefa.Titulo;
+            tarefa.Titulo = novaTarefa;
+            await _tarefaRepositorio.Atualizar(tarefa);
             _log.InfoFormat(BusinessMessages.OperacaoRealizadaComSucesso, "AlterarTarefa");
 
-            return _tarefaRepositorio.ListarTodas();
+            return await _tarefaRepositorio.ListarTodas();
         }      
 
     }

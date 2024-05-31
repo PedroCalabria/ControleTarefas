@@ -10,9 +10,9 @@ namespace ControleTarefas.Negocio.Interface.Negocios
 {
     public interface IUsuarioNegocio
     {
-        List<UsuarioDTO> InserirUsuario(CadastroUsuarioModel email);
-        List<UsuarioDTO> ListarUsuarios(List<string> emails);
-        List<UsuarioDTO> DeletarUsuario(string email);
-        List<UsuarioDTO> AlterarUsuario(string email, CadastroUsuarioModel novoUsuario);
+        Task<List<UsuarioDTO>> InserirUsuario(CadastroUsuarioModel email);
+        Task<List<UsuarioDTO>> ListarUsuarios(List<string> emails);
+        Task<List<UsuarioDTO>> DeletarUsuario(string email);
+        Task<List<UsuarioDTO>> AlterarUsuario(string email, CadastroUsuarioModel novoUsuario);
     }
 }

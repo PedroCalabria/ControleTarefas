@@ -14,15 +14,17 @@ namespace ControleTarefas.Negocio.Negocios
     {
         private static readonly ILog _log = LogManager.GetLogger(typeof(TarefaNegocio));
         private readonly IUsuarioRepositorio _usuarioRepositorio;
+        private readonly IAtribuirTarefaNegocio _atribuirTarefaNegocio;
 
-        public UsuarioNegocio(IUsuarioRepositorio usuarioRepositorio)
+        public UsuarioNegocio(IUsuarioRepositorio usuarioRepositorio, IAtribuirTarefaNegocio atribuirTarefaNegocio)
         {
             _usuarioRepositorio = usuarioRepositorio;
+            _atribuirTarefaNegocio = atribuirTarefaNegocio;
         }
 
-        public List<UsuarioDTO> InserirUsuario(CadastroUsuarioModel novoUsuario)
+        public async Task<List<UsuarioDTO>> InserirUsuario(CadastroUsuarioModel novoUsuario)
         {
-            var usuario = _usuarioRepositorio.ObterUsuario(novoUsuario.Email);
+            var usuario = await _usuarioRepositorio.ObterUsuario(novoUsuario.Email);
 
             if (usuario != null)
             {
@@ -36,32 +38,33 @@ namespace ControleTarefas.Negocio.Negocios
                 Nome = novoUsuario.Nome,
                 Perfil = novoUsuario.Perfil,
                 DataAtualizacao = DateTime.Now,
+                Login = novoUsuario.Login,
             };
 
-            _usuarioRepositorio.InserirUsuario(usuario);
+            await _usuarioRepositorio.Inserir(usuario);
             _log.InfoFormat(BusinessMessages.OperacaoRealizadaComSucesso, "InserirUsuario");
 
-            return _usuarioRepositorio.ListarTodos();
+            return await _usuarioRepositorio.ListarTodos();
         }
 
-        public List<UsuarioDTO> ListarUsuarios(List<string> emails)
+        public async Task<List<UsuarioDTO>> ListarUsuarios(List<string> emails)
         {
             if (emails == null)
             {
-                return _usuarioRepositorio.ListarTodos();
+                return await _usuarioRepositorio.ListarTodos();
             }
             else
             {
                 emails = emails.Select(email => email.ToUpper())
                     .ToList();
 
-                return _usuarioRepositorio.ListarUsuarios(emails);
+                return await _usuarioRepositorio.ListarUsuarios(emails);
             }
         }
 
-        public List<UsuarioDTO> AlterarUsuario(string email, CadastroUsuarioModel novoUsuario)
+        public async Task<List<UsuarioDTO>> AlterarUsuario(string email, CadastroUsuarioModel novoUsuario)
         {
-            var usuario = _usuarioRepositorio.ObterUsuario(email);
+            var usuario = await _usuarioRepositorio.ObterUsuario(email);
 
             if (usuario == null)
             {
@@ -76,16 +79,17 @@ namespace ControleTarefas.Negocio.Negocios
 
             _log.InfoFormat(BusinessMessages.OperacaoRealizadaComSucesso, "AlterarUsuario");
 
-            return _usuarioRepositorio.ListarTodos();
+            return await _usuarioRepositorio.ListarTodos();
         }
 
-        public List<UsuarioDTO> DeletarUsuario(string email)
+        public async Task<List<UsuarioDTO>> DeletarUsuario(string email)
         {
-            var usuario = _usuarioRepositorio.ObterUsuario(email);
-            
+            var usuario = await _usuarioRepositorio.ObterUsuario(email);
+
             if (usuario != null)
             {
-                _usuarioRepositorio.DeletarUsuario(usuario);
+                await _atribuirTarefaNegocio.RemoverUsuarioTarefas(usuario.Id);
+                await _usuarioRepositorio.Deletar(usuario);
                 _log.InfoFormat(BusinessMessages.OperacaoRealizadaComSucesso, "DeletarUsuario");
             }
             else
@@ -94,7 +98,7 @@ namespace ControleTarefas.Negocio.Negocios
                 throw new BusinessException(string.Format(BusinessMessages.RegistroNaoEncontrado, email));
             }
 
-            return _usuarioRepositorio.ListarTodos();
+            return await _usuarioRepositorio.ListarTodos();
         }
     }
 }
