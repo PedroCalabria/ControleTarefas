@@ -13,7 +13,7 @@ namespace ControleTarefas.Negocio.Negocios
 {
     public class AtribuirTarefaNegocio : IAtribuirTarefaNegocio
     {
-        private static readonly ILog _log = LogManager.GetLogger(typeof(TarefaNegocio));
+        private static readonly ILog _log = LogManager.GetLogger(typeof(AtribuirTarefaNegocio));
         private readonly IUsuarioRepositorio _usuarioRepositorio;
         private readonly ITarefaRepositorio _tarefaRepositorio;
 
@@ -54,6 +54,7 @@ namespace ControleTarefas.Negocio.Negocios
                     };
 
                     usuario.TarefasUsuario.Add(tarefaUsuario);
+                    tarefa.UsuariosTarefa.Add(tarefaUsuario);
                 }
             }
 
@@ -62,49 +63,27 @@ namespace ControleTarefas.Negocio.Negocios
 
         public async Task<List<TarefaDTO>> ObterTarefasUsuario(int idUsuario)
         {
-            var usuario = await _usuarioRepositorio.ObterUsuario(idUsuario);
-
-            if (usuario == null)
-            {
-                _log.InfoFormat(BusinessMessages.RegistroNaoEncontrado, string.Format("usuario: {0}", idUsuario));
-                throw new BusinessException(string.Format(BusinessMessages.RegistroNaoEncontrado, string.Format("usuario: {0}", idUsuario)));
-            }
-
-            var tarefasIds = usuario.TarefasUsuario.Select(e => e.IdTarefa)
-                                           .ToList();
-
-            var tarefas = await _tarefaRepositorio.ConsultarTarefas(tarefasIds);
+            var tarefas = await _usuarioRepositorio.ObterTarefasUsuario(idUsuario);
 
             return tarefas.Select(e => new TarefaDTO
-            {
-                Titulo = e.Titulo,
-            })
-                .ToList();
+                           {
+                               Titulo = e.Titulo,
+                           })
+                           .ToList();
         }
 
         public async Task<List<UsuarioDTO>> ObterUsuariosTarefa(int idTarefa)
         {
-            var tarefa = await _tarefaRepositorio.ObterTarefa(idTarefa);
-
-            if (tarefa == null)
-            {
-                _log.InfoFormat(BusinessMessages.RegistroNaoEncontrado, string.Format("tarefa: {0}", idTarefa));
-                throw new BusinessException(string.Format(BusinessMessages.RegistroNaoEncontrado, string.Format("tarefa: {0}", idTarefa)));
-            }
-
-            var usuariosIds = tarefa.UsuariosTarefa.Select(e => e.IdUsuario)
-                                           .ToList();
-
-            var usuarios = await _usuarioRepositorio.ConsultarUsuarios(usuariosIds);
+            var usuarios = await _tarefaRepositorio.ObterUsuariosTarefa(idTarefa);
 
             return usuarios.Select(e => new UsuarioDTO
-            {
-                Nome = e.Nome,
-                Email = e.Email,
-                Perfil = e.Perfil,
-                DataAtualizacao = e.DataAtualizacao
-            })
-                .ToList();
+                            {
+                                Nome = e.Nome,
+                                Email = e.Email,
+                                Perfil = e.Perfil,
+                                DataAtualizacao = e.DataAtualizacao
+                            })
+                           .ToList();
         }
 
         public async Task RemoverTarefaUsuario(int idTarefa)
@@ -117,16 +96,7 @@ namespace ControleTarefas.Negocio.Negocios
                 throw new BusinessException(string.Format(BusinessMessages.RegistroNaoEncontrado, string.Format("tarefa: {0}", idTarefa)));
             }
 
-            var tarefaUsuario = tarefa.UsuariosTarefa.FirstOrDefault(e => e.IdTarefa == idTarefa);
-            var idsUsuarios = tarefa.UsuariosTarefa.Select(e => e.IdUsuario).ToList();
-
-            foreach(var idUsuario in idsUsuarios)
-            {
-                var usuario = await _usuarioRepositorio.ObterUsuario(idUsuario);
-                usuario.TarefasUsuario.Remove(tarefaUsuario);
-            }
-
-            tarefa.UsuariosTarefa.Clear();
+            tarefa.UsuariosTarefa = new();
         }
 
         public async Task RemoverTarefaUsuario(int idTarefa, int idUsuario)
@@ -151,21 +121,6 @@ namespace ControleTarefas.Negocio.Negocios
             
             usuario.TarefasUsuario.Remove(tarefaUsuario);
             tarefa.UsuariosTarefa.Remove(tarefaUsuario);
-        }
-
-        public async Task RemoverUsuarioTarefas(int idUsuario)
-        {
-            var usuario = await _usuarioRepositorio.ObterUsuario(idUsuario);
-
-            if (usuario == null)
-            {
-                _log.InfoFormat(BusinessMessages.RegistroNaoEncontrado, string.Format("usuario: {0}", idUsuario));
-                throw new BusinessException(string.Format(BusinessMessages.RegistroNaoEncontrado, string.Format("usuario: {0}", idUsuario)));
-            }
-
-            var tarefasUsuario = usuario.TarefasUsuario.Where(e => e.IdUsuario == idUsuario).ToList();
-
-            tarefasUsuario.Clear();
         }
     }
 }

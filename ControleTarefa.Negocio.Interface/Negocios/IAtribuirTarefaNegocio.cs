@@ -20,7 +20,5 @@ namespace ControleTarefas.Negocio.Interface.Negocios
         Task RemoverTarefaUsuario(int idTarefa);
 
         Task RemoverTarefaUsuario(int idTarefa, int idUsuario);
-
-        Task RemoverUsuarioTarefas(int idUsuario);
     }
 }

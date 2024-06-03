@@ -12,7 +12,7 @@ namespace ControleTarefas.Negocio.Negocios
 {
     public class UsuarioNegocio : IUsuarioNegocio
     {
-        private static readonly ILog _log = LogManager.GetLogger(typeof(TarefaNegocio));
+        private static readonly ILog _log = LogManager.GetLogger(typeof(UsuarioNegocio));
         private readonly IUsuarioRepositorio _usuarioRepositorio;
         private readonly IAtribuirTarefaNegocio _atribuirTarefaNegocio;
 
@@ -88,7 +88,6 @@ namespace ControleTarefas.Negocio.Negocios
 
             if (usuario != null)
             {
-                await _atribuirTarefaNegocio.RemoverUsuarioTarefas(usuario.Id);
                 await _usuarioRepositorio.Deletar(usuario);
                 _log.InfoFormat(BusinessMessages.OperacaoRealizadaComSucesso, "DeletarUsuario");
             }

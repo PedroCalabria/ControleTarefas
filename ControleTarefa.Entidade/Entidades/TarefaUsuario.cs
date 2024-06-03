@@ -12,7 +12,7 @@ namespace ControleTarefas.Entidade.Entidades
 
         public int IdTarefa { get; set; }
 
-        public bool Concluída { get; set; }
+        public bool Concluida { get; set; }
 
         public Tarefa Tarefa { get; set; }
 

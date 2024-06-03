@@ -25,17 +25,19 @@ namespace ControleTarefas.Repositorio.Map
                 .HasColumnName("id_tarefa")
                 .IsRequired();
 
-            builder.Property(e => e.Concluída)
+            builder.Property(e => e.Concluida)
                 .HasColumnName("flg_concluida")
                 .IsRequired();
 
             builder.HasOne(e => e.Usuario)
                 .WithMany(e => e.TarefasUsuario)
-                .HasForeignKey(e => e.IdUsuario);
+                .HasForeignKey(e => e.IdUsuario)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             builder.HasOne(e => e.Tarefa)
                 .WithMany(e => e.UsuariosTarefa)
-                .HasForeignKey(e => e.IdTarefa);
+                .HasForeignKey(e => e.IdTarefa)
+                .OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }

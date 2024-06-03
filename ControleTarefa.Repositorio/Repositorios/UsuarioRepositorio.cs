@@ -12,7 +12,8 @@ namespace ControleTarefas.Repositorio.Repositorios
 
         public Task<List<UsuarioDTO>> ListarTodos()
         {
-            var query = EntitySet.OrderBy(usuario => usuario.Nome)
+            var entity = EntitySet;
+            var query = entity.OrderBy(usuario => usuario.Nome)
                            .Distinct()
                            .Select(usuario => new UsuarioDTO
                            {
@@ -61,6 +62,17 @@ namespace ControleTarefas.Repositorio.Repositorios
             var query = EntitySet.Where(e => idsUsuarios.Contains(e.Id));
 
             return query.ToListAsync();
+        }
+
+        public async Task<List<Tarefa>> ObterTarefasUsuario(int IdUsuario)
+        {
+            var usuario = await EntitySet.Include(e => e.TarefasUsuario)
+                .ThenInclude(e => e.Tarefa)
+                .FirstOrDefaultAsync(usuario => usuario.Id == IdUsuario);
+
+            var tarefasUsuario = usuario.TarefasUsuario.Select(e => e.Tarefa).ToList();
+
+            return tarefasUsuario;
         }
     }
 }

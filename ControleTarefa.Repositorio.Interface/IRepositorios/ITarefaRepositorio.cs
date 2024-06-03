@@ -14,5 +14,6 @@ namespace ControleTarefas.Repositorio.Interface.IRepositorios
         Task<Tarefa> ObterTarefa(int idTarefa);
 
         Task<List<Tarefa>> ConsultarTarefas(List<int> idTarefas);
+        Task<List<Usuario>> ObterUsuariosTarefa(int idTarefa);
     }
 }

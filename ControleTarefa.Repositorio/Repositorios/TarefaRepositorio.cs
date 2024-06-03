@@ -51,5 +51,16 @@ namespace ControleTarefas.Repositorio.Repositorios
 
             return query.ToListAsync();
         }
+
+        public async Task<List<Usuario>> ObterUsuariosTarefa(int idTarefa)
+        {
+            var tarefa = await EntitySet.Include(e => e.UsuariosTarefa)
+                .ThenInclude(e => e.Usuario)
+                .FirstOrDefaultAsync(tarefa => tarefa.Id == idTarefa);
+
+            var tarefasUsuario = tarefa.UsuariosTarefa.Select(e => e.Usuario).ToList();
+
+            return tarefasUsuario;
+        }
     }
 }
