@@ -3,17 +3,19 @@ using ControleTarefas.Entidade.Entidades;
 
 namespace ControleTarefas.Repositorio.Interface.IRepositorios
 {
-    public interface IUsuarioRepositorio
+    public interface IUsuarioRepositorio : IRepositorioBase<Usuario>
     {
 
-        List<UsuarioDTO> ListarUsuarios(List<string> emails);
+        Task<List<UsuarioDTO>> ListarUsuarios(List<string> emails);
 
-        List<UsuarioDTO> ListarTodos();
+        Task<List<UsuarioDTO>> ListarTodos();
 
-        void InserirUsuario(Usuario novoUsuario);
+        Task<Usuario> ObterUsuario(string email);
 
-        void DeletarUsuario(Usuario usuario);
+        Task<Usuario> ObterUsuario(int idUsuario);
 
-        Usuario? ObterUsuario(string email);
+        Task<List<Usuario>> ConsultarUsuarios(List<int> idsUsuarios);
+
+        Task<List<Tarefa>> ObterTarefasUsuario(int IdUsuario);
     }
 }

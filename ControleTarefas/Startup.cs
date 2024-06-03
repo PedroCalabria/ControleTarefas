@@ -11,9 +11,10 @@ namespace ControleTarefas.WebApi
 {
     public class Startup
     {
-        public Startup()
+        public IConfiguration Configuracao { get; }
+        public Startup(IConfiguration configuracao)
         {
-
+            Configuracao = configuracao;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -21,6 +22,8 @@ namespace ControleTarefas.WebApi
             services.AddControllers();
 
             services.AddDependencyInjectionConfiguration();
+
+            services.AddDatabaseConfiguration(Configuracao);
 
             services.AddFluentConfiguration();
             

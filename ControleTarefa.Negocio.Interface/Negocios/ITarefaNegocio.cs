@@ -11,12 +11,12 @@ namespace ControleTarefas.Negocio.Interface.Negocios
 {
     public interface ITarefaNegocio
     {
-        List<TarefaDTO> ListarTarefas(List<string> tarefas);
+        Task<List<TarefaDTO>> ListarTarefas(List<string> tarefas);
 
-        List<TarefaDTO> InserirTarefa(CadastroTarefaModel novaTarefa);
+        Task<List<TarefaDTO>> InserirTarefa(CadastroTarefaModel novaTarefa);
 
-        List<TarefaDTO> DeletarTarefa(string nomeTarefa);
+        Task<List<TarefaDTO>> DeletarTarefa(string nomeTarefa);
 
-        List<TarefaDTO> AlterarTarefa(string nomeTarefa, CadastroTarefaModel novaTarefa);
+        Task<List<TarefaDTO>> AlterarTarefa(string nomeTarefa, string novaTarefa);
     }
 }

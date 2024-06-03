@@ -3,6 +3,7 @@ using ControleTarefas.Negocio.Interface.Negocios;
 using ControleTarefas.Entidade.DTO;
 using ControleTarefas.Utilitarios.Exceptions;
 using ControleTarefas.Entidade.Model;
+using ControleTarefas.Utilitarios;
 
 namespace ControleTarefas.Api.Controllers
 {
@@ -12,18 +13,18 @@ namespace ControleTarefas.Api.Controllers
 
     // Define o padrão de rota para as ações dentro do controlador.
     [Route("api/[controller]")]
-    public class ControleTarefaController
+    public class CRUDTarefaController
     {
         // { get; set; } define o getter e setter automaticamente.
         private static List<string> Tarefas { get; set; } = new() { "Instalação", "Configuração", "Criar Projeto", "Exercício Prático" };
 
         // O modificador readonly garante que _logger só pode ser atribuído uma vez.
-        private readonly ILogger<ControleTarefaController> _logger;
+        private readonly ILogger<CRUDTarefaController> _logger;
 
         private readonly ITarefaNegocio _tarefaNegocio;
 
         //Construtor da classe ControleTarefaController.
-        public ControleTarefaController(ILogger<ControleTarefaController> logger, ITarefaNegocio tarefaNegocio)
+        public CRUDTarefaController(ILogger<CRUDTarefaController> logger, ITarefaNegocio tarefaNegocio)
         {
             _logger = logger;
             _tarefaNegocio = tarefaNegocio;
@@ -32,35 +33,38 @@ namespace ControleTarefas.Api.Controllers
         // Indica o tipo de requisição
         [HttpGet("ListarTodasTarefas")]
 
-        // ActionResult => retorno de método usado em controladores do ASP.NET Core MVC para representar o resultado de uma ação.
+        // Task => retorno de método usado em controladores do ASP.NET Core MVC para representar o resultado de uma ação.
         // Fornece flexibilidade ao controlador para retornar diferentes tipos de respostas HTTP, como um objeto JSON.
-        public ActionResult<List<TarefaDTO>> ListarTodasTarefas()
+        public async Task<List<TarefaDTO>> ListarTodasTarefas()
         {
-            return _tarefaNegocio.ListarTarefas(null);
+            return await _tarefaNegocio.ListarTarefas(null);
         }
 
         [HttpPost("FiltrarTarefas")]
-        public ActionResult<List<TarefaDTO>> FiltrarTarefas(List<string> tarefas)
+        public async Task<List<TarefaDTO>> FiltrarTarefas(List<string> tarefas)
         {
-            return _tarefaNegocio.ListarTarefas(tarefas);
+            return await _tarefaNegocio.ListarTarefas(tarefas);
         }
 
         [HttpPost("InserirTarefa")]
-        public ActionResult<List<TarefaDTO>> InserirTarefa(CadastroTarefaModel novaTarefa)
+        [TransacaoObrigatoria]
+        public async Task<List<TarefaDTO>> InserirTarefa(CadastroTarefaModel novaTarefa)
         {
-            return _tarefaNegocio.InserirTarefa(novaTarefa);
+            return await _tarefaNegocio.InserirTarefa(novaTarefa);
         }
 
         [HttpDelete("DeletarTarefa")]
-        public ActionResult<List<TarefaDTO>> DeletarTarefa(string nomeTarefa)
+        [TransacaoObrigatoria]
+        public async Task<List<TarefaDTO>> DeletarTarefa(string nomeTarefa)
         {
-           return _tarefaNegocio.DeletarTarefa(nomeTarefa);
+           return await _tarefaNegocio.DeletarTarefa(nomeTarefa);
         }
 
         [HttpPut("AlterarTarefa")]
-        public ActionResult<List<TarefaDTO>> AlterarTarefa(string nomeTarefa, string novoNomeTarefa)
+        [TransacaoObrigatoria]
+        public async Task<List<TarefaDTO>> AlterarTarefa(string nomeTarefa, string novoNomeTarefa)
         {
-            return _tarefaNegocio.AlterarTarefa(nomeTarefa, novoNomeTarefa);
+            return await _tarefaNegocio.AlterarTarefa(nomeTarefa, novoNomeTarefa);
         }
     }
 }
