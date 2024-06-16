@@ -14,12 +14,10 @@ namespace ControleTarefas.Negocio.Negocios
     {
         private static readonly ILog _log = LogManager.GetLogger(typeof(UsuarioNegocio));
         private readonly IUsuarioRepositorio _usuarioRepositorio;
-        private readonly IAtribuirTarefaNegocio _atribuirTarefaNegocio;
 
-        public UsuarioNegocio(IUsuarioRepositorio usuarioRepositorio, IAtribuirTarefaNegocio atribuirTarefaNegocio)
+        public UsuarioNegocio(IUsuarioRepositorio usuarioRepositorio)
         {
             _usuarioRepositorio = usuarioRepositorio;
-            _atribuirTarefaNegocio = atribuirTarefaNegocio;
         }
 
         public async Task<List<UsuarioDTO>> InserirUsuario(CadastroUsuarioModel novoUsuario)

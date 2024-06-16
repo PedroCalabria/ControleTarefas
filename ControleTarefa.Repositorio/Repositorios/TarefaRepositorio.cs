@@ -62,5 +62,23 @@ namespace ControleTarefas.Repositorio.Repositorios
 
             return tarefasUsuario;
         }
+
+        public Task<List<TarefaDTO>> ConsultarTarefasPorIdUsuario(int idUsuario)
+        {
+            var query2 = EntitySet.Where(tarefa => tarefa.UsuariosTarefa.Any(usuarioTarefa => usuarioTarefa.IdUsuario == idUsuario));
+
+            var query = from tarefa in _contexto.Tarefas
+                        join tarefaUsuario in _contexto.TarefaUsuario
+                            on tarefa.Id equals tarefaUsuario.IdTarefa
+                        join usuario in _contexto.Usuario
+                            on tarefaUsuario.IdUsuario equals usuario.Id
+                        where usuario.Id == idUsuario
+                        select new TarefaDTO
+                        {
+                            Titulo = tarefa.Titulo
+                        };
+
+            return query.ToListAsync();
+        }
     }
 }
